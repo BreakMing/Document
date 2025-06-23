@@ -97,10 +97,6 @@
     conda create -y -n lerobot python=3.11
     conda activate lerobot
 
-因为Lerobot需要ffmpeg包的支持，所以先安装它，执行以下命令：
-
-    conda install -y ffmpeg -c conda-forge
-
 ### 第二步：下载Lerobot源码并应用补丁
 
 执行以下命令下载Lreobot源码和补丁文件。
@@ -122,6 +118,10 @@
     git apply ../lerobot-on-ascend/Ascend_Lerobot.patch
 
 ### 第三步：安装所需的包和依赖
+
+因为Lerobot需要ffmpeg包的支持，所以先安装它，执行以下命令：
+
+    conda install -y ffmpeg -c conda-forge
 
 安装Lerobto所需的依赖。
 
