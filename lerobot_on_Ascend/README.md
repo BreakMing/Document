@@ -152,13 +152,15 @@
 
 3. 给予Kernels安装包执行权限。  
 
-        chmod +x Ascend-cann-kernels-<chip_type>_<version>_linux-<arch>.run
+         chmod +x Ascend-cann-kernels-310b_8.1.RC1_linux-aarch64.run
+
 4. 安装Kernels。  
 
-        ./Ascend-cann-kernels-<chip_type>_<version>_linux-<arch>.run --install
+         ./Ascend-cann-kernels-310b_8.1.RC1_linux-aarch64.run --install
 
-    安装完成后，如下所示：
-    ![Ascend_cann_kernels_success](docs/images/Ascend_cann_kernels_success.png)
+安装完成后，如下所示：
+
+![Ascend_cann_kernels_success](docs/images/Ascend_cann_kernels_success.png)
 
 更多安装细节请参考[官方文档](https://www.hiascend.com/document/detail/zh/CANNCommunityEdition/81RC1beta1/softwareinst/instg/instg_0008.html?Mode=PmIns&InstallType=local&OS=Ubuntu&Software=cannToolKit)。
 
@@ -168,11 +170,73 @@
 
 更多`Ascend Extension for PyTorch`细节请参考[官方仓库](https://gitee.com/ascend/pytorch)。
 
-后续操作请参考[Lerobot官方](https://github.com/huggingface/lerobot)教程
+## 机械臂配置和部署
+
+### 第一步：端口匹配
+
+执行以下命令，根据终端提示，拔掉任一USB数据线后按下回车，即可在终端打印出被拔掉数据线的端口号
+
+        python lerobot/scripts/find_motors_bus_port.py
+
+前往`lerobot/common/robot_devices/robots`路径下打开`configs.py`文件，依据个人所组装的机械臂型号更新端口号。如下图红色方框所示：
+
+![Ascend_cann_kernels_success](docs/images/ttyACM_change.png)
 
 
+### 第二步：配置舵机ID
 
+将舵机与控制板连接，执行以下命令，即可为连接的舵机配置ID号为`1`，并设置当前位置为`2048`（位置中值）。
 
+    python lerobot/scripts/configure_motor.py \
+       --port /dev/ttyACM0 \
+       --brand feetech \
+       --model sts3215 \
+       --baudrate 1000000 \
+       --ID 1
 
+修改`--ID`参数依次为电机配置ID号，直至到`6`
 
+### 第三步：组装机械臂
 
+具体组装细节请参考[Hugging Face官网](https://huggingface.co/docs/lerobot/so100#first-motor)
+
+### 第四步：标定机械臂
+
+执行以下命令。
+
+    python lerobot/scripts/control_robot.py \
+      --robot.type=so100 \
+      --robot.cameras='{}' \
+      --control.type=calibrate
+
+按照提示摆好对应动作后点击`Enter`。
+
+#### 手动校准Follower_Arm
+
+ | follower_middle | follower_zero | follower_rotated | follower_rest |
+ |------|------|------|------|
+ |![follower_middle](docs\images\follower_middle.webp)|![follower_zero](docs\images\follower_zero.webp)|![follower_rotated](docs\images\follower_rotated.webp)|![follower_rest](docs\images\follower_rest.webp)|
+
+#### 手动校准Leader_Arm
+
+ | leader_middle | leader_zero | leader_rotated | leader_rest |
+ |------|------|------|------|
+ |![leader_middle](docs\images\leader_middle.webp)|![leader_zero](docs\images\leader_zero.webp)|![leader_rotated](docs\images\leader_rotated.webp)|![leader_rest](docs\images\leader_rest.webp)|
+
+### 第五步：遥操作
+
+执行以下命令，可开启遥操作并在屏幕上显示摄像头画面。
+
+    python lerobot/scripts/control_robot.py \
+      --robot.type=so100 \
+      --control.type=teleoperate \
+      --control.display_data=true 
+
+若仅开启遥操作，可执行以下命令：
+
+    python lerobot/scripts/control_robot.py \
+      --robot.type=so100 \
+      --robot.cameras='{}' \
+      --control.type=teleoperate
+
+后续模型训练和推理以及更多细节可参考`examples`目录下的`10_use_so100.md`文件
