@@ -215,13 +215,13 @@
 
  | follower_middle | follower_zero | follower_rotated | follower_rest |
  |------|------|------|------|
- |![follower_middle](docs\images\follower_middle.webp)|![follower_zero](docs\images\follower_zero.webp)|![follower_rotated](docs\images\follower_rotated.webp)|![follower_rest](docs\images\follower_rest.webp)|
+ |![follower_middle](docs/images/follower_middle.webp)|![follower_zero](docs/images/follower_zero.webp)|![follower_rotated](docs/images/follower_rotated.webp)|![follower_rest](docs/images/follower_rest.webp)|
 
 #### 手动校准Leader_Arm
 
  | leader_middle | leader_zero | leader_rotated | leader_rest |
  |------|------|------|------|
- |![leader_middle](docs\images\leader_middle.webp)|![leader_zero](docs\images\leader_zero.webp)|![leader_rotated](docs\images\leader_rotated.webp)|![leader_rest](docs\images\leader_rest.webp)|
+ |![leader_middle](docs/images/leader_middle.webp)|![leader_zero](docs/images/leader_zero.webp)|![leader_rotated](docs/images/leader_rotated.webp)|![leader_rest](docs/images/leader_rest.webp)|
 
 ### 第五步：遥操作
 
